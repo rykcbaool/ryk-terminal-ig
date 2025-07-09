@@ -1,5 +1,5 @@
 {
-  "name": "kidra_terminal",
+  "name": "ryk_terminal",
   "version": "0.2.1",
   "description": "A clean terminal interface and command handler plugin for Mineflayer.",
   "main": "lib/index.js",
@@ -9,6 +9,7 @@
     "fix-lint": "ts-standard --fix",
     "test": "ts-standard"
   },
+
   "keywords": [
     "bot",
     "mineflayer",
@@ -17,6 +18,10 @@
     "command"
   ],
   "author": "thedudefromci",
+  "contributors": [
+    "ryk_cbaool"
+  ],
+
   "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
