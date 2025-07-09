@@ -9,7 +9,7 @@ export class GetPosCommand implements CommandHandler {
     this.bot = bot
   }
 
-  execute (args: string[]): CommandExecution | null {
+  execute(args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
     if (args.length === 0) {
       const pos = this.bot.entity.position
       const x = String(Math.floor(pos.x))

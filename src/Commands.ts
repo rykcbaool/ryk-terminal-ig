@@ -5,18 +5,31 @@ import { WaitCommand } from './commands/WaitCommand'
 import { GotoCommand } from './commands/GotoCommand'
 import { QuitCommand } from './commands/QuitCommand'
 import { GetPosCommand } from './commands/GetPosCommand'
+import { KitCommand} from './commands/KItCommand'
 
 export interface CommandExecution {
-  readonly pid: number
-  begin: () => void
-  cancel: () => void
-  isRunning: () => boolean
-  cleanup: () => void
+  pid: number
+  begin(): void
+  cancel(): void
+  isRunning(): boolean
+  cleanup(): void
+}
+
+export type ExecuteFunction =
+    | ((args: string[]) => CommandExecution | null)
+    | ((ctx: CommandContext) => CommandExecution | null)
+    | ((args: string[]) => void | Promise<void>)
+    | ((ctx: CommandContext) => void | Promise<void>)
+
+export interface CommandContext {
+  bot: Bot
+  username: string
+  args: string[]
 }
 
 export interface CommandHandler {
-  readonly cmdName: string
-  execute: (args: string[], pid: number) => CommandExecution | null
+  cmdName: string
+  execute: (args: string[], number: number) => void | CommandExecution | Promise<void | CommandExecution | null> | null
 }
 
 export class Command {
@@ -37,9 +50,10 @@ export class CommandBuffer {
   private readonly bot: Bot
   private readonly buffer: Command[] = []
   private readonly handlers: CommandHandler[] = []
-  private activeCmd: CommandExecution | null = null
+  private activeCmd: void | CommandExecution | Promise<void | CommandExecution | null> | null = null
   private readonly asyncCmds: CommandExecution[] = []
   private pidIncrement: number = 0
+  private parsedCmd: string[] | undefined;
 
   constructor (bot: Bot) {
     this.bot = bot
@@ -51,6 +65,7 @@ export class CommandBuffer {
     this.addHandler(new GotoCommand(bot))
     this.addHandler(new QuitCommand(bot))
     this.addHandler(new GetPosCommand(bot))
+    this.addHandler(new KitCommand(bot))
   }
 
   queue (cmd: string): void {
@@ -84,10 +99,16 @@ export class CommandBuffer {
     const exec = handler.execute(parsedCmd.args, this.pidIncrement++)
     if (exec == null) return
 
-    exec.begin()
-    this.asyncCmds.push(exec)
-    this.bot.terminal.log('Started Async Process. PID: ' + exec.pid.toString())
-    this.bot.terminal.addProcess('PID ' + exec.pid.toString() + ' : ' + parsedCmd.toString())
+    if ("begin" in exec) {
+      exec.begin()
+    }
+    this.asyncCmds.push(<CommandExecution>exec)
+    if ("pid" in exec) {
+      this.bot.terminal.log('Started Async Process. PID: ' + exec.pid.toString())
+    }
+    if ("pid" in exec) {
+      this.bot.terminal.addProcess('PID ' + exec.pid.toString() + ' : ' + parsedCmd.toString())
+    }
   }
 
   private finishAsyncCommand (exec: CommandExecution): void {
@@ -109,8 +130,11 @@ export class CommandBuffer {
       return
     }
 
-    if (!this.activeCmd.isRunning()) {
-      this.activeCmd.cleanup()
+    // @ts-ignore
+    if (!"isRunning" in this.activeCmd && this.activeCmd.isRunning()) {
+      if ("cleanup" in this.activeCmd) {
+        this.activeCmd.cleanup()
+      }
       this.activeCmd = null
     }
   }
@@ -130,8 +154,11 @@ export class CommandBuffer {
       return
     }
 
-    this.activeCmd = handler.execute(next.args, this.pidIncrement++)
-    if (this.activeCmd != null) this.activeCmd.begin()
+    // @ts-ignore
+    this.activeCmd = handler.execute(this.parsedCmd.args, this.pidIncrement++)
+    if (this.activeCmd != null) if ("begin" in this.activeCmd) {
+      this.activeCmd.begin()
+    }
   }
 }
 

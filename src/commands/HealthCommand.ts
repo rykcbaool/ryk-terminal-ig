@@ -9,7 +9,7 @@ export class HealthCommand implements CommandHandler {
     this.bot = bot
   }
 
-  execute(args: string[]): CommandExecution | null {
+    execute(args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
     const health = this.bot.health
     this.bot.terminal?.log(`Health: ${health} hearts`)
     return null
