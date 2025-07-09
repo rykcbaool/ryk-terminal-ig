@@ -1,4 +1,4 @@
-<h1 align="center">Kidra Terminal</h1>
+<h1 align="center">Kidra Terminal ( but with more commands from me )</h1>
 <p align="center"><i>A clean terminal interface and command handler plugin for Mineflayer.</i></p>
 
 <p align="center">
