@@ -1,6 +1,6 @@
 {
   "name": "ryk_terminal",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A clean terminal interface and command handler plugin for Mineflayer.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
