@@ -5,7 +5,7 @@ const { GoalNear } = goals
 import { CommandHandler } from '../types'
 
 
-// code start here
+// code start
 
 
 const kitChests = {
