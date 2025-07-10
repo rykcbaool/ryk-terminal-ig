@@ -5,11 +5,11 @@ export class HealthCommand implements CommandHandler {
   private readonly bot: Bot
   readonly cmdName = 'health'
 
-  constructor(bot: Bot) {
+  constructor (bot: Bot) {
     this.bot = bot
   }
 
-    execute(args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
+  execute (args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
     const health = this.bot.health
     this.bot.terminal?.log(`Health: ${health} hearts`)
     return null

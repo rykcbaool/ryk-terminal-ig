@@ -5,14 +5,14 @@ import { WaitCommand } from './commands/WaitCommand'
 import { GotoCommand } from './commands/GotoCommand'
 import { QuitCommand } from './commands/QuitCommand'
 import { GetPosCommand } from './commands/GetPosCommand'
-import { KitCommand} from './commands/KItCommand'
+import { KitCommand } from './commands/KItCommand'
 
 export interface CommandExecution {
   pid: number
-  begin(): void
-  cancel(): void
-  isRunning(): boolean
-  cleanup(): void
+  begin: () => void
+  cancel: () => void
+  isRunning: () => boolean
+  cleanup: () => void
 }
 
 export type ExecuteFunction =
@@ -53,7 +53,7 @@ export class CommandBuffer {
   private activeCmd: void | CommandExecution | Promise<void | CommandExecution | null> | null = null
   private readonly asyncCmds: CommandExecution[] = []
   private pidIncrement: number = 0
-  private parsedCmd: string[] | undefined;
+  private readonly parsedCmd: string[] | undefined
 
   constructor (bot: Bot) {
     this.bot = bot
@@ -99,14 +99,14 @@ export class CommandBuffer {
     const exec = handler.execute(parsedCmd.args, this.pidIncrement++)
     if (exec == null) return
 
-    if ("begin" in exec) {
+    if ('begin' in exec) {
       exec.begin()
     }
-    this.asyncCmds.push(<CommandExecution>exec)
-    if ("pid" in exec) {
+    this.asyncCmds.push(exec as CommandExecution)
+    if ('pid' in exec) {
       this.bot.terminal.log('Started Async Process. PID: ' + exec.pid.toString())
     }
-    if ("pid" in exec) {
+    if ('pid' in exec) {
       this.bot.terminal.addProcess('PID ' + exec.pid.toString() + ' : ' + parsedCmd.toString())
     }
   }
@@ -130,9 +130,9 @@ export class CommandBuffer {
       return
     }
 
-    // @ts-ignore
-    if (!"isRunning" in this.activeCmd && this.activeCmd.isRunning()) {
-      if ("cleanup" in this.activeCmd) {
+    // @ts-expect-error
+    if (!'isRunning' in this.activeCmd && this.activeCmd.isRunning()) {
+      if ('cleanup' in this.activeCmd) {
         this.activeCmd.cleanup()
       }
       this.activeCmd = null
@@ -154,10 +154,12 @@ export class CommandBuffer {
       return
     }
 
-    // @ts-ignore
+    // @ts-expect-error
     this.activeCmd = handler.execute(this.parsedCmd.args, this.pidIncrement++)
-    if (this.activeCmd != null) if ("begin" in this.activeCmd) {
-      this.activeCmd.begin()
+    if (this.activeCmd != null) {
+      if ('begin' in this.activeCmd) {
+        this.activeCmd.begin()
+      }
     }
   }
 }

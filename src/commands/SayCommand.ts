@@ -9,7 +9,7 @@ export class SayCommand implements CommandHandler {
     this.bot = bot
   }
 
-  execute(args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
+  execute (args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
     if (args.length === 1) {
       this.bot.chat(args[0])
     } else {
