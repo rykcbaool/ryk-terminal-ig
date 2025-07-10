@@ -4,6 +4,10 @@ import { Movements, goals } from 'mineflayer-pathfinder'
 const { GoalNear } = goals
 import { CommandHandler } from '../types'
 
+
+// code start here
+
+
 const kitChests = {
     pvp: { x: 106165, y: 64, z: -393410 },
     redstone: { x: 106171, y: 64, z: -393398 },
