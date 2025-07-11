@@ -18,12 +18,12 @@
 
 This plugin can be installed as an `npm` package using this command:
 ```bash
-npm install --save kidra_terminal
+npm install --save ryk_terminal
 ```
 
 After installation, the plugin can be loaded for a Mineflayer bot like any other plugin.
 ```js
-const terminalPlugin = require('kidra_terminal').plugin
+const terminalPlugin = require('ryk_terminal').plugin
 
 bot.loadPlugin(terminalPlugin)
 ```
