@@ -6,6 +6,9 @@ import { GotoCommand } from './commands/GotoCommand'
 import { QuitCommand } from './commands/QuitCommand'
 import { GetPosCommand } from './commands/GetPosCommand'
 import { POSCommand } from './commands/POSCommand'
+import { HelpCommand } from './commands/HelpCommand'
+import { InvCommand} from "./commands/InvCommand"
+import { HpCommand } from './commands/HpCommand'
 
 
 export interface CommandExecution {
@@ -67,6 +70,9 @@ export class CommandBuffer {
     this.addHandler(new QuitCommand(bot))
     this.addHandler(new GetPosCommand(bot))
     this.addHandler(new POSCommand(bot))
+    this.addHandler(new HelpCommand(bot))
+    this.addHandler(new HpCommand(bot))
+    this.addHandler(new InvCommand(bot))
   }
 
   queue (cmd: string): void {
