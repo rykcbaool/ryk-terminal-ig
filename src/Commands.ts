@@ -5,7 +5,8 @@ import { WaitCommand } from './commands/WaitCommand'
 import { GotoCommand } from './commands/GotoCommand'
 import { QuitCommand } from './commands/QuitCommand'
 import { GetPosCommand } from './commands/GetPosCommand'
-import { KitCommand } from './commands/KItCommand'
+import { POSCommand } from './commands/POSCommand'
+
 
 export interface CommandExecution {
   pid: number
@@ -65,7 +66,7 @@ export class CommandBuffer {
     this.addHandler(new GotoCommand(bot))
     this.addHandler(new QuitCommand(bot))
     this.addHandler(new GetPosCommand(bot))
-    this.addHandler(new KitCommand(bot))
+    this.addHandler(new POSCommand(bot))
   }
 
   queue (cmd: string): void {
