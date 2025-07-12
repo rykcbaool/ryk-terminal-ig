@@ -9,7 +9,7 @@ export class AsyncCommand implements CommandHandler {
     this.bot = bot
   }
 
-  execute (args: string[], number: number): void | CommandExecution | Promise<void | CommandExecution | null> | null {
+  execute(args: string[], number?: number): CommandExecution | null {
     if (args.length === 0) {
       this.bot.terminal.log('Usage: async <command> [..args]')
     } else {

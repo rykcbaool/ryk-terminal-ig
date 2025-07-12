@@ -16,6 +16,7 @@ export class UserInterface {
 
   readonly commandBuffer: CommandBuffer
 
+
   constructor (bot: Bot) {
     this.bot = bot
     this.commandBuffer = new CommandBuffer(this.bot)

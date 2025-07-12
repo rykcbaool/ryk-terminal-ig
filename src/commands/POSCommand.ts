@@ -11,9 +11,17 @@ export class POSCommand implements CommandHandler {
         this.bot = bot
     }
 
-    execute(): CommandExecution | null {
+    execute(args?: string[], number?: number): CommandExecution | null {
         const pos = this.bot.entity.position
-        this.bot.terminal.log(`Bot position: X=${pos.x.toFixed(1)} Y=${pos.y.toFixed(1)} Z=${pos.z.toFixed(1)}`)
+        const coords = `X=${pos.x.toFixed(1)} Y=${pos.y.toFixed(1)} Z=${pos.z.toFixed(1)}`
+
+        if (args?.[0] === 'test') {
+            this.bot.terminal.log(`Bot position: ${coords}`)
+
+        } else {
+            this.bot.terminal.log(`Bot position: ${coords}`)
+        }
+
         return null
     }
 }
